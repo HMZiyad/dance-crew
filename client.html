@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dance Crew App - API Test Client</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0d0d1a;
+            color: #e0e0f0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #e040fb, #7c4dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            font-size: 1.1rem;
+            color: #b388ff;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            font-size: 0.95rem;
+            margin-top: 4px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #7c4dff;
+        }
+
+        input[type="file"] {
+            margin-top: 4px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: transform 0.15s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e040fb, #7c4dff);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(124, 77, 255, 0.3);
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
+        .btn-process {
+            background: #00c853;
+            color: #fff;
+        }
+
+        .btn-view {
+            background: #2979ff;
+            color: #fff;
+        }
+
+        .btn-danger {
+            background: #ff1744;
+            color: #fff;
+        }
+
+        .btn-refresh {
+            background: rgba(255, 255, 255, 0.1);
+            color: #b388ff;
+            border: 1px solid #b388ff;
+        }
+
+        .video-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .video-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .video-info strong {
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+        }
+
+        .status-processing {
+            background: rgba(41, 121, 255, 0.15);
+            color: #2979ff;
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-completed {
+            background: rgba(0, 200, 83, 0.15);
+            color: #00c853;
+        }
+
+        .status-failed {
+            background: rgba(255, 23, 68, 0.15);
+            color: #ff1744;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .upload-status {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .upload-status.success {
+            background: rgba(0, 200, 83, 0.1);
+            border: 1px solid rgba(0, 200, 83, 0.3);
+            color: #69f0ae;
+        }
+
+        .upload-status.error {
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            color: #ff8a80;
+        }
+
+        .upload-status.loading {
+            background: rgba(41, 121, 255, 0.1);
+            border: 1px solid rgba(41, 121, 255, 0.3);
+            color: #82b1ff;
+        }
+
+        .details-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 1.2rem;
+        }
+
+        .details-box h3 {
+            color: #e040fb;
+            margin-bottom: 0.5rem;
+        }
+
+        .details-box pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #c5cae9;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .meta {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 4px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🕺 Dance Crew App</h1>
+
+        <!-- Upload Section -->
+        <div class="section">
+            <h2>📤 Upload & Generate</h2>
+            <form id="uploadForm">
+                <div class="form-row">
+                    <label>Title
+                        <input type="text" id="title" placeholder="My Dance Video" required>
+                    </label>
+                    <label>Background Dancers
+                        <input type="number" id="dancers" value="4" min="1" max="20">
+                    </label>
+                </div>
+                <label>Video File
+                    <input type="file" id="videoFile" accept="video/*" required>
+                </label>
+                <button type="submit" class="btn btn-primary" style="margin-top:0.5rem; width:100%;">
+                    Upload & Start Processing
+                </button>
+            </form>
+            <div id="uploadResult"></div>
+        </div>
+
+        <!-- List Videos Section -->
+        <div class="section">
+            <h2>🎬 Your Videos <button class="btn btn-sm btn-refresh" onclick="fetchVideos()"
+                    style="margin-left:auto;">Refresh</button></h2>
+            <div id="videosList">
+                <div class="empty-state">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Video Details Section -->
+        <div class="section">
+            <h2>📋 Analysis Result</h2>
+            <div id="videoDetails">
+                <div class="empty-state">Select a video to view Gemini's choreography plan.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+        let pollingIntervals = {};
+
+        // Upload Video
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('dancers_count', document.getElementById('dancers').value);
+            formData.append('file', document.getElementById('videoFile').files[0]);
+
+            const resultDiv = document.getElementById('uploadResult');
+            resultDiv.innerHTML = '<div class="upload-status loading">⏳ Uploading video & starting Gemini processing...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/videos/`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                resultDiv.innerHTML = `<div class="upload-status success">✅ Uploaded! Video ID: ${data.id} — Processing started automatically. Refresh the list to check status.</div>`;
+                fetchVideos();
+                // Start polling for this video's status
+                startPolling(data.id);
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="upload-status error">❌ Error: ${error.message}</div>`;
+            }
+        });
+
+        // Poll for processing completion
+        function startPolling(videoId) {
+            if (pollingIntervals[videoId]) return;
+            pollingIntervals[videoId] = setInterval(async () => {
+                try {
+                    const response = await fetch(`${API_URL}/videos/${videoId}`);
+                    const video = await response.json();
+                    if (video.processed_status === 'completed' || video.processed_status === 'failed') {
+                        clearInterval(pollingIntervals[videoId]);
+                        delete pollingIntervals[videoId];
+                        fetchVideos();
+                        viewDetails(videoId); // Auto-show results
+                    }
+                } catch (e) {
+                    clearInterval(pollingIntervals[videoId]);
+                    delete pollingIntervals[videoId];
+                }
+            }, 5000); // Poll every 5 seconds
+        }
+
+        // Fetch Videos
+        async function fetchVideos() {
+            const listDiv = document.getElementById('videosList');
+
+            try {
+                const response = await fetch(`${API_URL}/videos/`);
+                const videos = await response.json();
+
+                if (videos.length === 0) {
+                    listDiv.innerHTML = '<div class="empty-state">No videos uploaded yet.</div>';
+                    return;
+                }
+
+                let html = '';
+                videos.forEach(video => {
+                    const statusClass = video.processed_status || 'pending';
+                    html += `
+                        <div class="video-item">
+                            <div class="video-info">
+                                <strong>${video.title}</strong>
+                                <span class="status-badge status-${statusClass}">${statusClass}</span>
+                                <div class="meta">ID: ${video.id} · ${video.dancers_count} dancers · ${new Date(video.uploaded_at).toLocaleString()}</div>
+                            </div>
+                            <div class="video-actions">
+                                <button class="btn btn-sm btn-process" onclick="processVideo(${video.id}, ${video.dancers_count})">Re-Generate</button>
+                                <button class="btn btn-sm btn-view" onclick="viewDetails(${video.id})">View</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteVideo(${video.id})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                    // Auto-poll if still processing
+                    if (statusClass === 'processing' || statusClass === 'pending') {
+                        startPolling(video.id);
+                    }
+                });
+                listDiv.innerHTML = html;
+            } catch (error) {
+                listDiv.innerHTML = `<div class="empty-state">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Trigger Processing (Re-generate)
+        async function processVideo(id, count) {
+            const newCount = prompt(`How many background dancers?`, count);
+            if (!newCount) return;
+
+            try {
+                const response = await fetch(`${API_URL}/videos/${id}/process?dancers_count=${parseInt(newCount)}`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                fetchVideos();
+                startPolling(id);
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        // View Details
+        async function viewDetails(id) {
+            const detailsDiv = document.getElementById('videoDetails');
+            detailsDiv.innerHTML = '<div class="empty-state">Loading...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/videos/${id}`);
+                const video = await response.json();
+
+                let content = `<div class="details-box">`;
+                content += `<h3>${video.title}</h3>`;
+                content += `<p class="meta">Status: <span class="status-badge status-${video.processed_status}">${video.processed_status}</span> · ${video.dancers_count} dancers</p>`;
+
+                // Original video
+                content += `<div style="margin-top:1rem;">`;
+                content += `<h4 style="color:#b388ff; margin-bottom:0.5rem;">Original Video</h4>`;
+                if (video.original_video_url) {
+                    content += `<video controls style="width:100%; max-height:300px; border-radius:8px; background:#000;">
+                        <source src="${video.original_video_url}" type="video/mp4">
+                    </video>`;
+                }
+                content += `</div>`;
+
+                if (video.processed_status === 'processing') {
+                    content += `<p style="margin-top:1rem; color:#82b1ff;">⏳ Veo is generating your group dance video... This may take 1-6 minutes. Please wait.</p>`;
+                } else if (video.processed_status === 'completed' && video.generated_video_url) {
+                    // Generated video
+                    content += `<div style="margin-top:1rem;">`;
+                    content += `<h4 style="color:#00c853; margin-bottom:0.5rem;">🎬 Generated Group Dance Video</h4>`;
+                    content += `<video controls autoplay style="width:100%; max-height:400px; border-radius:8px; background:#000;">
+                        <source src="${video.generated_video_url}" type="video/mp4">
+                    </video>`;
+                    content += `<a href="${video.generated_video_url}" download class="btn btn-sm btn-primary" style="display:inline-block; margin-top:0.5rem; text-decoration:none;">⬇ Download Video</a>`;
+                    content += `<a href="${API_URL}/generated-videos/${video.id}/download" class="btn btn-sm btn-view" style="display:inline-block; margin-top:0.5rem; margin-left:0.5rem; text-decoration:none;">⬇ Download (Named)</a>`;
+                    content += `</div>`;
+                } else if (video.processed_status === 'failed') {
+                    content += `<p style="margin-top:1rem; color:#ff8a80;">❌ Processing failed. Check server logs or try again.</p>`;
+                }
+
+                if (video.gemini_analysis) {
+                    content += `<details style="margin-top:1rem;"><summary style="color:#b388ff; cursor:pointer;">View Dance Analysis</summary>`;
+                    content += `<pre>${escapeHtml(video.gemini_analysis)}</pre>`;
+                    content += `</details>`;
+                }
+
+                content += `</div>`;
+                detailsDiv.innerHTML = content;
+            } catch (error) {
+                detailsDiv.innerHTML = `<div class="empty-state">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Delete Video
+        async function deleteVideo(id) {
+            if (!confirm("Delete this video?")) return;
+            try {
+                await fetch(`${API_URL}/videos/${id}`, { method: 'DELETE' });
+                fetchVideos();
+                document.getElementById('videoDetails').innerHTML = '<div class="empty-state">Video deleted.</div>';
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load initially
+        fetchVideos();
+    </script>
+</body>
+
+</html>

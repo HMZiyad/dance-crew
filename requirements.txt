@@ -1,0 +1,58 @@
+fastapi
+uvicorn
+python-multipart
+sqlalchemy
+google-generativeai
+google-genai
+opencv-python-headless
+python-dotenv
+moviepy
+python-multipart>=0.0.6
+sqlalchemy>=2.0.0
+google-genai>=1.0.0
+python-dotenv>=1.0.0
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+rembg>=2.0.50
+onnxruntime>=1.16.0
+moviepy>=2.0.0
+imageio-ffmpeg>=0.4.9
+
+# Dance Crew v9 — Motion-Tracked Compositing
+# pip install -r requirements.txt
+
+# Core
+fastapi>=0.100.0
+uvicorn>=0.23.0
+python-multipart>=0.0.6
+sqlalchemy>=2.0.0
+
+# Google AI
+google-genai>=1.0.0
+python-dotenv>=1.0.0
+
+# Video Processing
+opencv-python-headless>=4.8.0
+opencv-contrib-python>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+
+# Motion Tracking (optional but recommended)
+mediapipe>=0.10.0
+
+# Segmentation (optional but recommended)
+rembg>=2.0.50
+onnxruntime>=1.16.0
+
+# Video encoding
+moviepy>=2.0.0
+imageio-ffmpeg>=0.4.9
+
+# System requirement: ffmpeg
+# Ubuntu: sudo apt install ffmpeg
+# macOS: brew install ffmpeg
+# Windows: https://ffmpeg.org/download.html
+
+# MediaPipe pose model (download once):
+# wget https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/latest/pose_landmarker_heavy.task
