@@ -29,3 +29,20 @@ class VideoResponse(VideoBase):
 
     class Config:
         from_attributes = True
+
+class ImageJobResponse(BaseModel):
+    id: int
+    title: str
+    dance_style: str
+    dancers_count: int
+    status: str
+    created_at: datetime
+    image_file_path: Optional[str] = None
+    output_file_path: Optional[str] = None
+    analysis: Optional[str] = None
+    image_url: Optional[str] = None
+    generated_video_url: Optional[str] = None
+ 
+    class Config:
+        from_attributes = True
+ 
