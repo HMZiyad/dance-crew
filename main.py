@@ -1,3 +1,5 @@
+import utils.transport
+import utils.session
 from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,10 +11,13 @@ import uuid
 from typing import List, Optional
 from datetime import datetime
 
-from database import engine, get_db, init_db, Video, ImageJob
-from models import VideoCreate, VideoResponse, VideoUpdate, ImageJobResponse
+from database import engine, get_db, init_db, Video, ImageJob, AnimeJob, FaceVideoJob
+from models import VideoCreate, VideoResponse, VideoUpdate, ImageJobResponse, AnimeJobResponse, FaceVideoJobResponse
 import video_processor
 import imgevideo
+import anime_processor
+import anime_processor_runway
+import face_video_processor
 
 # Initialize DB
 init_db()
@@ -72,6 +77,27 @@ def build_imagejob_response(job: ImageJob, base_url: str) -> dict:
         "output_file_path":  job.output_file_path,
         "analysis":          job.analysis,
         "image_url":         f"{base_url}/static/{img_path}" if img_path else None,
+        "generated_video_url": f"{base_url}/static/{out_path}" if out_path else None,
+    }
+
+
+def build_animejob_response(job: AnimeJob, base_url: str) -> dict:
+    orig_path = job.original_image_path.replace("\\", "/") if job.original_image_path else None
+    anime_path = job.anime_image_path.replace("\\", "/") if job.anime_image_path else None
+    out_path = job.output_file_path.replace("\\", "/") if job.output_file_path else None
+    return {
+        "id":                  job.id,
+        "title":               job.title,
+        "dance_style":         job.dance_style,
+        "duration":            job.duration,
+        "ai_model":            job.ai_model,
+        "status":              job.status,
+        "created_at":          job.created_at,
+        "original_image_path": job.original_image_path,
+        "anime_image_path":    job.anime_image_path,
+        "output_file_path":    job.output_file_path,
+        "original_image_url":  f"{base_url}/static/{orig_path}" if orig_path else None,
+        "anime_image_url":     f"{base_url}/static/{anime_path}" if anime_path else None,
         "generated_video_url": f"{base_url}/static/{out_path}" if out_path else None,
     }
 
@@ -332,6 +358,227 @@ def image_video_task(job_id: int):
         print(f"[ImgVideo] Job {job_id} error: {e}")
         job.status   = "failed"
         job.analysis = str(e)
+        db.commit()
+    finally:
+        db.close()
+
+
+# ══════════════════════════════════════════════════════════
+#  ── FULL ANIME VIDEO ROUTES (new) ──
+# ══════════════════════════════════════════════════════════
+
+@app.post("/anime-video/")
+async def create_anime_video_job(
+    request: Request,
+    title: str = Form(...),
+    dance_style: str = Form(...),
+    duration: int = Form(30),
+    ai_model: str = Form("veo"),
+    file: UploadFile = File(...),
+    background_tasks: BackgroundTasks = BackgroundTasks(),
+    db: Session = Depends(get_db)
+):
+    """
+    Upload a photo + choose a dance style → generate a multi-sec anime dance video.
+    """
+    file_ext        = file.filename.rsplit(".", 1)[-1].lower()
+    unique_filename = f"{uuid.uuid4()}.{file_ext}"
+    file_path       = os.path.join(UPLOAD_DIR, unique_filename)
+    with open(file_path, "wb") as buf:
+        shutil.copyfileobj(file.file, buf)
+
+    job = AnimeJob(
+        title         = title,
+        dance_style   = dance_style,
+        duration      = duration,
+        ai_model      = ai_model,
+        original_image_path = file_path,
+        status        = "pending",
+    )
+    db.add(job); db.commit(); db.refresh(job)
+
+    background_tasks.add_task(anime_video_task, job.id)
+
+    base_url = str(request.base_url).rstrip("/")
+    return build_animejob_response(job, base_url)
+
+@app.get("/anime-video/", response_model=List[AnimeJobResponse])
+def list_anime_jobs(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    jobs = db.query(AnimeJob).order_by(AnimeJob.id.desc()).offset(skip).limit(limit).all()
+    base_url = str(request.base_url).rstrip("/")
+    return [build_animejob_response(j, base_url) for j in jobs]
+
+@app.get("/anime-video/{job_id}", response_model=AnimeJobResponse)
+def get_anime_job(job_id: int, request: Request, db: Session = Depends(get_db)):
+    job = db.query(AnimeJob).filter(AnimeJob.id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    base_url = str(request.base_url).rstrip("/")
+    return build_animejob_response(job, base_url)
+
+@app.delete("/anime-video/{job_id}")
+def delete_anime_job(job_id: int, db: Session = Depends(get_db)):
+    job = db.query(AnimeJob).filter(AnimeJob.id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    for p in [job.original_image_path, job.anime_image_path, job.output_file_path]:
+        if p and os.path.exists(p):
+            try: os.remove(p)
+            except Exception: pass
+    db.delete(job); db.commit()
+    return {"ok": True}
+
+@app.get("/anime-video/{job_id}/download")
+def download_anime_video(job_id: int, db: Session = Depends(get_db)):
+    job = db.query(AnimeJob).filter(AnimeJob.id == job_id).first()
+    if not job or not job.output_file_path or not os.path.exists(job.output_file_path):
+        raise HTTPException(status_code=404, detail="Output video not found")
+    return FileResponse(
+        path=job.output_file_path, media_type="video/mp4",
+        filename=f"{job.title}_anime_{job.dance_style}.mp4"
+    )
+
+def anime_video_task(job_id: int):
+    db = next(get_db())
+    try:
+        job = db.query(AnimeJob).filter(AnimeJob.id == job_id).first()
+        if not job: return
+
+        job.status = "processing"; db.commit()
+
+        output_filename = f"animevid_{uuid.uuid4()}.mp4"
+        output_path     = os.path.join(PROCESSED_DIR, output_filename)
+
+        print(f"[AnimeVideo] Job {job_id}: {job.dance_style} - {job.duration}s ({job.ai_model})")
+        if job.ai_model == "runway":
+            result = anime_processor_runway.generate_anime_video(
+                job.original_image_path,
+                job.dance_style,
+                job.duration,
+                output_path,
+            )
+        else:
+            result = anime_processor.generate_anime_video(
+                job.original_image_path,
+                job.dance_style,
+                job.duration,
+                output_path,
+            )
+        
+        job.status = result.get("status", "failed")
+        job.anime_image_path = result.get("anime_image_path")
+        job.output_file_path = result.get("output_file_path")
+        db.commit()
+    except Exception as e:
+        print(f"[AnimeVideo] Job {job_id} error: {e}")
+        job.status = "failed"
+        db.commit()
+    finally:
+        db.close()
+
+
+# ══════════════════════════════════════════════════════════
+#  ── FACE VIDEO ROUTES ──
+# ══════════════════════════════════════════════════════════
+
+def build_facejob_response(job: FaceVideoJob, base_url: str) -> dict:
+    img_path = job.image_file_path.replace("\\", "/") if job.image_file_path else None
+    out_path = job.output_file_path.replace("\\", "/") if job.output_file_path else None
+    return {
+        "id":                   job.id,
+        "title":                job.title,
+        "action":               job.action,
+        "duration":             job.duration,
+        "status":               job.status,
+        "created_at":           job.created_at,
+        "image_file_path":      job.image_file_path,
+        "output_file_path":     job.output_file_path,
+        "prompt_used":          job.prompt_used,
+        "image_url":            f"{base_url}/static/{img_path}" if img_path else None,
+        "generated_video_url":  f"{base_url}/static/{out_path}" if out_path else None,
+    }
+
+
+@app.post("/face-video/")
+async def create_face_video_job(
+    request: Request,
+    title: str = Form(...),
+    action: str = Form(...),
+    duration: int = Form(10),
+    file: UploadFile = File(...),
+    background_tasks: BackgroundTasks = BackgroundTasks(),
+    db: Session = Depends(get_db)
+):
+    file_ext = file.filename.split('.')[-1]
+    file_path = os.path.join(UPLOAD_DIR, f"{uuid.uuid4()}.{file_ext}")
+    with open(file_path, "wb") as buf:
+        shutil.copyfileobj(file.file, buf)
+
+    job = FaceVideoJob(
+        title=title,
+        action=action,
+        duration=duration,
+        image_file_path=file_path,
+        status="pending",
+    )
+    db.add(job); db.commit(); db.refresh(job)
+    background_tasks.add_task(face_video_task, job.id)
+
+    base_url = str(request.base_url).rstrip("/")
+    return build_facejob_response(job, base_url)
+
+
+@app.get("/face-video/")
+def list_face_video_jobs(request: Request, db: Session = Depends(get_db)):
+    jobs = db.query(FaceVideoJob).order_by(FaceVideoJob.created_at.desc()).limit(50).all()
+    base_url = str(request.base_url).rstrip("/")
+    return [build_facejob_response(j, base_url) for j in jobs]
+
+
+@app.get("/face-video/{job_id}")
+def get_face_video_job(job_id: int, request: Request, db: Session = Depends(get_db)):
+    job = db.query(FaceVideoJob).filter(FaceVideoJob.id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    base_url = str(request.base_url).rstrip("/")
+    return build_facejob_response(job, base_url)
+
+
+default_actions = [
+    "hip-hop dancing", "breakdancing", "contemporary dance", "K-pop dancing",
+    "walking confidently", "running", "waving hello", "jumping joyfully",
+]
+
+@app.get("/face-video/actions/list")
+def list_face_actions():
+    return {"actions": default_actions}
+
+
+def face_video_task(job_id: int):
+    db = next(get_db())
+    try:
+        job = db.query(FaceVideoJob).filter(FaceVideoJob.id == job_id).first()
+        if not job: return
+        job.status = "processing"; db.commit()
+
+        output_filename = f"facevid_{uuid.uuid4()}.mp4"
+        output_path = os.path.join(PROCESSED_DIR, output_filename)
+
+        print(f"[FaceVideo] Job {job_id}: '{job.action}' {job.duration}s")
+        result = face_video_processor.generate_face_video(
+            job.image_file_path,
+            job.action,
+            job.duration,
+            output_path,
+        )
+
+        job.status = result.get("status", "failed")
+        job.output_file_path = result.get("output_file_path")
+        job.prompt_used = result.get("prompt_used", "")[:1000]
+        db.commit()
+    except Exception as e:
+        print(f"[FaceVideo] Job {job_id} error: {e}")
+        job.status = "failed"
         db.commit()
     finally:
         db.close()

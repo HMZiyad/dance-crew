@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dance Crew App</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -14,7 +21,11 @@
       min-height: 100vh;
     }
 
-    .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
 
     h1 {
       text-align: center;
@@ -30,8 +41,9 @@
       display: flex;
       gap: 0;
       margin-bottom: 1.5rem;
-      border-bottom: 2px solid rgba(255,255,255,0.08);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.08);
     }
+
     .tab-btn {
       padding: 0.75rem 1.5rem;
       background: none;
@@ -44,23 +56,34 @@
       margin-bottom: -2px;
       transition: color 0.2s, border-color 0.2s;
     }
-    .tab-btn:hover { color: #b388ff; }
+
+    .tab-btn:hover {
+      color: #b388ff;
+    }
+
     .tab-btn.active {
       color: #e040fb;
       border-bottom-color: #e040fb;
     }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
 
     /* ── Sections ── */
     .section {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
       backdrop-filter: blur(10px);
     }
+
     .section h2 {
       font-size: 1.1rem;
       color: #b388ff;
@@ -71,14 +94,21 @@
     }
 
     /* ── Form controls ── */
-    label { display: block; margin-bottom: 0.8rem; font-size: 0.9rem; color: #aaa; }
+    label {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
 
-    input[type="text"], input[type="number"], select {
+    input[type="text"],
+    input[type="number"],
+    select {
       width: 100%;
       padding: 10px 14px;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
-      background: rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
       color: #fff;
       font-size: 0.95rem;
       margin-top: 4px;
@@ -86,23 +116,40 @@
       transition: border-color 0.2s;
       -webkit-appearance: none;
     }
-    input:focus, select:focus { border-color: #7c4dff; }
-    select option { background: #1a1a2e; color: #fff; }
 
-    input[type="file"] { margin-top: 4px; color: #aaa; }
+    input:focus,
+    select:focus {
+      border-color: #7c4dff;
+    }
+
+    select option {
+      background: #1a1a2e;
+      color: #fff;
+    }
+
+    input[type="file"] {
+      margin-top: 4px;
+      color: #aaa;
+    }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
+
     .form-row-3 {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
       gap: 1rem;
     }
+
     @media (max-width: 620px) {
-      .form-row, .form-row-3 { grid-template-columns: 1fr; }
+
+      .form-row,
+      .form-row-3 {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* ── Image preview ── */
@@ -112,7 +159,7 @@
       max-height: 200px;
       border-radius: 8px;
       display: none;
-      border: 2px solid rgba(124,77,255,0.4);
+      border: 2px solid rgba(124, 77, 255, 0.4);
     }
 
     /* ── Dance style pills ── */
@@ -122,20 +169,26 @@
       gap: 0.5rem;
       margin-top: 0.5rem;
     }
+
     .style-pill {
       padding: 6px 14px;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
       color: #ccc;
       font-size: 0.8rem;
       cursor: pointer;
       transition: all 0.15s;
       user-select: none;
     }
-    .style-pill:hover { border-color: #7c4dff; color: #b388ff; }
+
+    .style-pill:hover {
+      border-color: #7c4dff;
+      color: #b388ff;
+    }
+
     .style-pill.selected {
-      background: linear-gradient(135deg, rgba(224,64,251,0.2), rgba(124,77,255,0.2));
+      background: linear-gradient(135deg, rgba(224, 64, 251, 0.2), rgba(124, 77, 255, 0.2));
       border-color: #e040fb;
       color: #e040fb;
     }
@@ -152,18 +205,48 @@
       text-decoration: none;
       display: inline-block;
     }
-    .btn:hover { transform: translateY(-1px); }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
     .btn-primary {
       background: linear-gradient(135deg, #e040fb, #7c4dff);
       color: #fff;
-      box-shadow: 0 4px 16px rgba(124,77,255,0.3);
+      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.3);
     }
-    .btn-sm { padding: 6px 14px; font-size: 0.8rem; border-radius: 6px; }
-    .btn-process { background: #00c853; color: #fff; }
-    .btn-view    { background: #2979ff; color: #fff; }
-    .btn-danger  { background: #ff1744; color: #fff; }
-    .btn-refresh { background: rgba(255,255,255,0.1); color: #b388ff; border: 1px solid #b388ff; }
-    .btn-dl      { background: #00bcd4; color: #fff; }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      border-radius: 6px;
+    }
+
+    .btn-process {
+      background: #00c853;
+      color: #fff;
+    }
+
+    .btn-view {
+      background: #2979ff;
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: #ff1744;
+      color: #fff;
+    }
+
+    .btn-refresh {
+      background: rgba(255, 255, 255, 0.1);
+      color: #b388ff;
+      border: 1px solid #b388ff;
+    }
+
+    .btn-dl {
+      background: #00bcd4;
+      color: #fff;
+    }
 
     /* ── Status badges ── */
     .status-badge {
@@ -174,12 +257,39 @@
       font-weight: 600;
       text-transform: uppercase;
     }
-    .status-pending    { background: rgba(255,193,7,.15);  color: #ffc107; }
-    .status-processing { background: rgba(41,121,255,.15); color: #2979ff; animation: pulse 1.5s infinite; }
-    .status-completed  { background: rgba(0,200,83,.15);   color: #00c853; }
-    .status-failed     { background: rgba(255,23,68,.15);  color: #ff1744; }
 
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+    .status-pending {
+      background: rgba(255, 193, 7, .15);
+      color: #ffc107;
+    }
+
+    .status-processing {
+      background: rgba(41, 121, 255, .15);
+      color: #2979ff;
+      animation: pulse 1.5s infinite;
+    }
+
+    .status-completed {
+      background: rgba(0, 200, 83, .15);
+      color: #00c853;
+    }
+
+    .status-failed {
+      background: rgba(255, 23, 68, .15);
+      color: #ff1744;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .5
+      }
+    }
 
     /* ── Upload status bar ── */
     .upload-status {
@@ -188,14 +298,29 @@
       border-radius: 8px;
       font-size: 0.9rem;
     }
-    .upload-status.success { background:rgba(0,200,83,.1);  border:1px solid rgba(0,200,83,.3);  color:#69f0ae; }
-    .upload-status.error   { background:rgba(255,23,68,.1); border:1px solid rgba(255,23,68,.3); color:#ff8a80; }
-    .upload-status.loading { background:rgba(41,121,255,.1);border:1px solid rgba(41,121,255,.3);color:#82b1ff; }
+
+    .upload-status.success {
+      background: rgba(0, 200, 83, .1);
+      border: 1px solid rgba(0, 200, 83, .3);
+      color: #69f0ae;
+    }
+
+    .upload-status.error {
+      background: rgba(255, 23, 68, .1);
+      border: 1px solid rgba(255, 23, 68, .3);
+      color: #ff8a80;
+    }
+
+    .upload-status.loading {
+      background: rgba(41, 121, 255, .1);
+      border: 1px solid rgba(41, 121, 255, .3);
+      color: #82b1ff;
+    }
 
     /* ── List items ── */
     .video-item {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 10px;
       padding: 1rem;
       margin-bottom: 0.8rem;
@@ -205,21 +330,44 @@
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-    .video-info { flex: 1; min-width: 200px; }
-    .video-info strong { color: #fff; font-size: 1rem; }
-    .video-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-    .meta { font-size: 0.8rem; color: #777; margin-top: 4px; }
+
+    .video-info {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .video-info strong {
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .video-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .meta {
+      font-size: 0.8rem;
+      color: #777;
+      margin-top: 4px;
+    }
 
     /* ── Details box ── */
     .details-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 10px;
       padding: 1.2rem;
     }
-    .details-box h3 { color: #e040fb; margin-bottom: 0.5rem; }
+
+    .details-box h3 {
+      color: #e040fb;
+      margin-bottom: 0.5rem;
+    }
+
     .details-box pre {
-      background: rgba(0,0,0,0.3);
+      background: rgba(0, 0, 0, 0.3);
       padding: 1rem;
       border-radius: 8px;
       overflow-x: auto;
@@ -231,14 +379,20 @@
       max-height: 300px;
       overflow-y: auto;
     }
-    .empty-state { text-align: center; color: #666; padding: 2rem; font-size: 0.9rem; }
+
+    .empty-state {
+      text-align: center;
+      color: #666;
+      padding: 2rem;
+      font-size: 0.9rem;
+    }
 
     /* ── Style tag on list item ── */
     .dance-tag {
       display: inline-block;
       padding: 2px 8px;
-      background: rgba(224,64,251,0.12);
-      border: 1px solid rgba(224,64,251,0.3);
+      background: rgba(224, 64, 251, 0.12);
+      border: 1px solid rgba(224, 64, 251, 0.3);
       color: #e040fb;
       border-radius: 12px;
       font-size: 0.72rem;
@@ -247,185 +401,346 @@
     }
   </style>
 </head>
+
 <body>
-<div class="container">
-  <h1>🕺 Dance Crew App</h1>
+  <div class="container">
+    <h1>🕺 Dance Crew App</h1>
 
-  <!-- Tab buttons -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('video')">🎥 Video → Group Dance</button>
-    <button class="tab-btn"       onclick="switchTab('image')">🖼️ Photo → Dance Video</button>
-  </div>
+    <!-- Tab buttons -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('video')">🎥 Video → Group Dance</button>
+      <button class="tab-btn" onclick="switchTab('image')">🖼️ Photo → Dance Video</button>
+      <button class="tab-btn" onclick="switchTab('anime')">🎨 Photo → Anime Video</button>
+      <button class="tab-btn" onclick="switchTab('face')">🧑 Photo → Face Video</button>
+    </div>
 
-  <!-- ════════════════════════════════════════════════════
+    <!-- ════════════════════════════════════════════════════
        TAB 1 — VIDEO UPLOAD
        ════════════════════════════════════════════════════ -->
-  <div id="tab-video" class="tab-panel active">
+    <div id="tab-video" class="tab-panel active">
 
-    <div class="section">
-      <h2>📤 Upload Video & Generate Group Dance</h2>
-      <form id="uploadForm">
-        <div class="form-row">
-          <label>Title
-            <input type="text" id="title" placeholder="My Dance Video" required>
+      <div class="section">
+        <h2>📤 Upload Video & Generate Group Dance</h2>
+        <form id="uploadForm">
+          <div class="form-row">
+            <label>Title
+              <input type="text" id="title" placeholder="My Dance Video" required>
+            </label>
+            <label>Background Dancers
+              <input type="number" id="dancers" value="4" min="1" max="20">
+            </label>
+          </div>
+          <label>Video File
+            <input type="file" id="videoFile" accept="video/*" required>
           </label>
-          <label>Background Dancers
-            <input type="number" id="dancers" value="4" min="1" max="20">
-          </label>
+          <button type="submit" class="btn btn-primary" style="margin-top:0.75rem; width:100%;">
+            Upload & Start Processing
+          </button>
+        </form>
+        <div id="uploadResult"></div>
+      </div>
+
+      <div class="section">
+        <h2>🎬 Your Videos
+          <button class="btn btn-sm btn-refresh" onclick="fetchVideos()" style="margin-left:auto;">
+            Refresh
+          </button>
+        </h2>
+        <div id="videosList">
+          <div class="empty-state">Loading...</div>
         </div>
-        <label>Video File
-          <input type="file" id="videoFile" accept="video/*" required>
-        </label>
-        <button type="submit" class="btn btn-primary" style="margin-top:0.75rem; width:100%;">
-          Upload & Start Processing
-        </button>
-      </form>
-      <div id="uploadResult"></div>
-    </div>
+      </div>
 
-    <div class="section">
-      <h2>🎬 Your Videos
-        <button class="btn btn-sm btn-refresh" onclick="fetchVideos()" style="margin-left:auto;">
-          Refresh
-        </button>
-      </h2>
-      <div id="videosList"><div class="empty-state">Loading...</div></div>
-    </div>
+      <div class="section">
+        <h2>📋 Video Details</h2>
+        <div id="videoDetails">
+          <div class="empty-state">Select a video to view details.</div>
+        </div>
+      </div>
 
-    <div class="section">
-      <h2>📋 Video Details</h2>
-      <div id="videoDetails"><div class="empty-state">Select a video to view details.</div></div>
-    </div>
-
-  </div><!-- /tab-video -->
+    </div><!-- /tab-video -->
 
 
-  <!-- ════════════════════════════════════════════════════
+    <!-- ════════════════════════════════════════════════════
        TAB 2 — IMAGE TO VIDEO
        ════════════════════════════════════════════════════ -->
-  <div id="tab-image" class="tab-panel">
+    <div id="tab-image" class="tab-panel">
 
-    <div class="section">
-      <h2>🖼️ Photo → Dance Video (face preserved)</h2>
-      <p style="font-size:0.85rem;color:#888;margin-bottom:1rem;">
-        Upload a photo of a person, pick a dance style, and Veo will generate a 16-second
-        video of that exact person dancing — face and appearance unchanged.
-      </p>
-
-      <form id="imgForm">
-        <div class="form-row-3">
-          <label>Title
-            <input type="text" id="imgTitle" placeholder="My Dance" required>
-          </label>
-          <label>Backup Dancers (0 = solo)
-            <input type="number" id="imgDancers" value="0" min="0" max="10">
-          </label>
-          <label>Photo (JPG/PNG/WEBP)
-            <input type="file" id="imgFile" accept="image/*" required>
-          </label>
-        </div>
-
-        <!-- Image preview -->
-        <img id="imgPreview" alt="Preview">
-
-        <!-- Dance style picker -->
-        <label style="margin-top:1rem;">
-          Dance Style
-          <input type="hidden" id="selectedStyle" required>
-        </label>
-        <div class="style-pills" id="stylePills">
-          <!-- Populated by JS -->
-        </div>
-        <p id="styleError" style="color:#ff8a80;font-size:0.8rem;margin-top:0.4rem;display:none;">
-          ⚠ Please select a dance style.
+      <div class="section">
+        <h2>🖼️ Photo → Dance Video (face preserved)</h2>
+        <p style="font-size:0.85rem;color:#888;margin-bottom:1rem;">
+          Upload a photo of a person, pick a dance style, and Veo will generate a 16-second
+          video of that exact person dancing — face and appearance unchanged.
         </p>
 
-        <button type="submit" class="btn btn-primary" style="margin-top:1.2rem; width:100%;">
-          Generate Dance Video
-        </button>
-      </form>
-      <div id="imgUploadResult"></div>
-    </div>
+        <form id="imgForm">
+          <div class="form-row-3">
+            <label>Title
+              <input type="text" id="imgTitle" placeholder="My Dance" required>
+            </label>
+            <label>Backup Dancers (0 = solo)
+              <input type="number" id="imgDancers" value="0" min="0" max="10">
+            </label>
+            <label>Photo (JPG/PNG/WEBP)
+              <input type="file" id="imgFile" accept="image/*" required>
+            </label>
+          </div>
 
-    <div class="section">
-      <h2>🎞️ Image Dance Jobs
-        <button class="btn btn-sm btn-refresh" onclick="fetchImageJobs()" style="margin-left:auto;">
-          Refresh
-        </button>
-      </h2>
-      <div id="imageJobsList"><div class="empty-state">Loading...</div></div>
-    </div>
+          <!-- Image preview -->
+          <img id="imgPreview" alt="Preview">
 
-    <div class="section">
-      <h2>📋 Job Details</h2>
-      <div id="imageJobDetails"><div class="empty-state">Select a job to view results.</div></div>
-    </div>
+          <!-- Dance style picker -->
+          <label style="margin-top:1rem;">
+            Dance Style
+            <input type="hidden" id="selectedStyle" required>
+          </label>
+          <div class="style-pills" id="stylePills">
+            <!-- Populated by JS -->
+          </div>
+          <p id="styleError" style="color:#ff8a80;font-size:0.8rem;margin-top:0.4rem;display:none;">
+            ⚠ Please select a dance style.
+          </p>
 
-  </div><!-- /tab-image -->
+          <button type="submit" class="btn btn-primary" style="margin-top:1.2rem; width:100%;">
+            Generate Dance Video
+          </button>
+        </form>
+        <div id="imgUploadResult"></div>
+      </div>
 
-</div><!-- /container -->
+      <div class="section">
+        <h2>🎞️ Image Dance Jobs
+          <button class="btn btn-sm btn-refresh" onclick="fetchImageJobs()" style="margin-left:auto;">
+            Refresh
+          </button>
+        </h2>
+        <div id="imageJobsList">
+          <div class="empty-state">Loading...</div>
+        </div>
+      </div>
 
-<script>
-const API_URL = "http://127.0.0.1:8000";
-let videoPolls = {};
-let imagePolls = {};
+      <div class="section">
+        <h2>📋 Job Details</h2>
+        <div id="imageJobDetails">
+          <div class="empty-state">Select a job to view results.</div>
+        </div>
+      </div>
 
-// ── Tab switching ──────────────────────────────────────
-function switchTab(name) {
-  document.querySelectorAll('.tab-btn').forEach((b, i) => {
-    b.classList.toggle('active', ['video','image'][i] === name);
-  });
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(`tab-${name}`).classList.add('active');
-  if (name === 'video') fetchVideos();
-  if (name === 'image') { loadStyles(); fetchImageJobs(); }
-}
+    </div><!-- /tab-image -->
 
-// ═══════════════════════════════════════════════════════
-//  TAB 1 — VIDEO
-// ═══════════════════════════════════════════════════════
 
-document.getElementById('uploadForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const formData = new FormData();
-  formData.append('title',         document.getElementById('title').value);
-  formData.append('dancers_count', document.getElementById('dancers').value);
-  formData.append('file',          document.getElementById('videoFile').files[0]);
+    <!-- ════════════════════════════════════════════════════
+       TAB 3 — ANIME VIDEO
+       ════════════════════════════════════════════════════ -->
+    <div id="tab-anime" class="tab-panel">
 
-  const resultDiv = document.getElementById('uploadResult');
-  resultDiv.innerHTML = '<div class="upload-status loading">⏳ Uploading & starting Gemini processing...</div>';
-  try {
-    const r = await fetch(`${API_URL}/videos/`, { method:'POST', body: formData });
-    const d = await r.json();
-    resultDiv.innerHTML = `<div class="upload-status success">✅ Uploaded! ID: ${d.id} — processing started. Refresh the list.</div>`;
-    fetchVideos();
-    startVideoPolling(d.id);
-  } catch(err) {
-    resultDiv.innerHTML = `<div class="upload-status error">❌ ${err.message}</div>`;
-  }
-});
+      <div class="section">
+        <h2>🖼️ Photo → Anime Video</h2>
+        <p style="font-size:0.85rem;color:#888;margin-bottom:1rem;">
+          Upload a photo, pick a dance genre, and Runway AI will transform it into an anime character and generate a
+          30-second dance video.
+        </p>
 
-function startVideoPolling(id) {
-  if (videoPolls[id]) return;
-  videoPolls[id] = setInterval(async () => {
-    try {
-      const r = await fetch(`${API_URL}/videos/${id}`);
-      const v = await r.json();
-      if (v.processed_status === 'completed' || v.processed_status === 'failed') {
-        clearInterval(videoPolls[id]); delete videoPolls[id];
-        fetchVideos(); viewVideoDetails(id);
+        <form id="animeForm">
+          <div class="form-row">
+            <label>Title
+              <input type="text" id="animeTitle" placeholder="Anime Dance" required>
+            </label>
+            <label>Photo (JPG/PNG/WEBP)
+              <input type="file" id="animeFile" accept="image/*" required>
+            </label>
+          </div>
+
+          <img id="animePreview" alt="Preview"
+            style="margin-top: 0.75rem; max-width: 200px; max-height: 200px; border-radius: 8px; display: none; border: 2px solid rgba(124,77,255,0.4);">
+
+          <div class="form-row">
+            <label>Dance Genre
+              <select id="animeStyle" required style="width: 100%;">
+                <option value="hip-hop">Hip-Hop</option>
+                <option value="breakdancing / b-boy">Breakdancing / B-Boy</option>
+                <option value="popping & locking">Popping & Locking</option>
+                <option value="krump">Krump</option>
+                <option value="waacking">Waacking</option>
+                <option value="vogueing">Vogueing</option>
+                <option value="contemporary">Contemporary</option>
+                <option value="ballet">Ballet</option>
+                <option value="salsa">Salsa</option>
+                <option value="k-pop">K-Pop</option>
+                <option value="afrobeats">Afrobeats</option>
+              </select>
+            </label>
+            <label>Duration
+              <select id="animeDuration" required style="width: 100%;">
+                <option value="10">10 Seconds</option>
+                <option value="20">20 Seconds</option>
+                <option value="30" selected>30 Seconds</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-row" style="margin-top: 0.75rem;">
+            <label>AI Model Engine
+              <select id="animeAIModel" required style="width: 100%;">
+                <option value="runway">Gen-3 Alpha (RunwayML)</option>
+                <option value="veo">Veo 3.1 (Google)</option>
+              </select>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:1.2rem; width:100%;">
+            Generate Anime Video
+          </button>
+        </form>
+        <div id="animeUploadResult"></div>
+      </div>
+
+      <div class="section">
+        <h2>🎞️ Anime Video Jobs
+          <button class="btn btn-sm btn-refresh" onclick="fetchAnimeJobs()" style="margin-left:auto;">
+            Refresh
+          </button>
+        </h2>
+        <div id="animeJobsList">
+          <div class="empty-state">Loading...</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>📋 Anime Job Details</h2>
+        <div id="animeJobDetails">
+          <div class="empty-state">Select a job to view results.</div>
+        </div>
+      </div>
+
+    </div><!-- /tab-anime -->
+
+
+    <!-- ════════════════════════════════════════════════════
+       TAB 4 — FACE-CONSISTENT VIDEO
+       ════════════════════════════════════════════════════ -->
+    <div id="tab-face" class="tab-panel">
+
+      <div class="section">
+        <h2>🧑 Photo → Face-Consistent Video</h2>
+        <p style="font-size:0.85rem;color:#888;margin-bottom:1rem;">
+          Upload a photo of any person and describe what they should do in the video.
+          <strong style="color:#69f0ae;">RunwayML Gen-3 Alpha</strong> uses your photo directly as the seed image,
+          keeping the person's face and appearance <strong>identical</strong> throughout the generated video.
+        </p>
+        <form id="faceForm">
+          <div class="form-row">
+            <label>Title
+              <input type="text" id="faceTitle" placeholder="My Face Video" required>
+            </label>
+          </div>
+          <div class="form-row" style="margin-top:0.75rem;">
+            <label>Action / Description
+              <input type="text" id="faceAction" placeholder="e.g. hip-hop dancing, walking confidently, jumping joyfully" required style="width:100%;">
+            </label>
+          </div>
+          <div class="form-row" style="margin-top:0.75rem;">
+            <label>Duration
+              <select id="faceDuration" style="width:100%;">
+                <option value="5">5 Seconds</option>
+                <option value="10" selected>10 Seconds</option>
+                <option value="20">20 Seconds</option>
+              </select>
+            </label>
+          </div>
+          <div style="margin-top:0.75rem;">
+            <label style="display:block;margin-bottom:0.3rem;font-size:0.85rem;opacity:0.8;">Reference Photo</label>
+            <input type="file" id="faceFile" accept="image/*" required>
+            <img id="facePreview" src="" alt="Preview" style="display:none;max-width:160px;max-height:200px;margin-top:0.5rem;border-radius:8px;border:2px solid rgba(0,230,118,.4);">
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:1.2rem;width:100%;background:linear-gradient(135deg,#00e676,#00b0ff);">
+            🧑 Generate Face-Consistent Video
+          </button>
+        </form>
+        <div id="faceUploadResult"></div>
+      </div>
+
+      <div class="section">
+        <h2>🎬 Face Video Jobs
+          <button class="btn btn-sm btn-refresh" onclick="fetchFaceJobs()" style="margin-left:auto;">Refresh</button>
+        </h2>
+        <div id="faceJobsList">
+          <div class="empty-state">Loading...</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>📋 Job Details</h2>
+        <div id="faceJobDetails">
+          <div class="empty-state">Select a job to view results.</div>
+        </div>
+      </div>
+
+    </div><!-- /tab-face -->
+
+  </div><!-- /container -->
+
+  <script>
+    const API_URL = "http://127.0.0.1:8000";
+    let videoPolls = {};
+    let imagePolls = {};
+
+    // ── Tab switching ──────────────────────────────────────
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', ['video', 'image', 'anime'][i] === name);
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById(`tab-${name}`).classList.add('active');
+      if (name === 'video') fetchVideos();
+      if (name === 'image') { loadStyles(); fetchImageJobs(); }
+      if (name === 'anime') fetchAnimeJobs();
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  TAB 1 — VIDEO
+    // ═══════════════════════════════════════════════════════
+
+    document.getElementById('uploadForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('title', document.getElementById('title').value);
+      formData.append('dancers_count', document.getElementById('dancers').value);
+      formData.append('file', document.getElementById('videoFile').files[0]);
+
+      const resultDiv = document.getElementById('uploadResult');
+      resultDiv.innerHTML = '<div class="upload-status loading">⏳ Uploading & starting Gemini processing...</div>';
+      try {
+        const r = await fetch(`${API_URL}/videos/`, { method: 'POST', body: formData });
+        const d = await r.json();
+        resultDiv.innerHTML = `<div class="upload-status success">✅ Uploaded! ID: ${d.id} — processing started. Refresh the list.</div>`;
+        fetchVideos();
+        startVideoPolling(d.id);
+      } catch (err) {
+        resultDiv.innerHTML = `<div class="upload-status error">❌ ${err.message}</div>`;
       }
-    } catch { clearInterval(videoPolls[id]); delete videoPolls[id]; }
-  }, 5000);
-}
+    });
 
-async function fetchVideos() {
-  const el = document.getElementById('videosList');
-  try {
-    const r = await fetch(`${API_URL}/videos/`);
-    const videos = await r.json();
-    if (!videos.length) { el.innerHTML='<div class="empty-state">No videos yet.</div>'; return; }
-    el.innerHTML = videos.map(v => `
+    function startVideoPolling(id) {
+      if (videoPolls[id]) return;
+      videoPolls[id] = setInterval(async () => {
+        try {
+          const r = await fetch(`${API_URL}/videos/${id}`);
+          const v = await r.json();
+          if (v.processed_status === 'completed' || v.processed_status === 'failed') {
+            clearInterval(videoPolls[id]); delete videoPolls[id];
+            fetchVideos(); viewVideoDetails(id);
+          }
+        } catch { clearInterval(videoPolls[id]); delete videoPolls[id]; }
+      }, 5000);
+    }
+
+    async function fetchVideos() {
+      const el = document.getElementById('videosList');
+      try {
+        const r = await fetch(`${API_URL}/videos/`);
+        const videos = await r.json();
+        if (!videos.length) { el.innerHTML = '<div class="empty-state">No videos yet.</div>'; return; }
+        el.innerHTML = videos.map(v => `
       <div class="video-item">
         <div class="video-info">
           <strong>${escHtml(v.title)}</strong>
@@ -438,34 +753,34 @@ async function fetchVideos() {
           <button class="btn btn-sm btn-danger"  onclick="deleteVideo(${v.id})">Delete</button>
         </div>
       </div>`).join('');
-    videos.forEach(v => {
-      if (v.processed_status === 'processing' || v.processed_status === 'pending')
-        startVideoPolling(v.id);
-    });
-  } catch(err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
-}
+        videos.forEach(v => {
+          if (v.processed_status === 'processing' || v.processed_status === 'pending')
+            startVideoPolling(v.id);
+        });
+      } catch (err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
+    }
 
-async function reprocessVideo(id, count) {
-  const n = prompt('How many background dancers?', count);
-  if (!n) return;
-  await fetch(`${API_URL}/videos/${id}/process?dancers_count=${parseInt(n)}`, {method:'POST'});
-  fetchVideos(); startVideoPolling(id);
-}
+    async function reprocessVideo(id, count) {
+      const n = prompt('How many background dancers?', count);
+      if (!n) return;
+      await fetch(`${API_URL}/videos/${id}/process?dancers_count=${parseInt(n)}`, { method: 'POST' });
+      fetchVideos(); startVideoPolling(id);
+    }
 
-async function deleteVideo(id) {
-  if (!confirm('Delete this video?')) return;
-  await fetch(`${API_URL}/videos/${id}`, {method:'DELETE'});
-  fetchVideos();
-  document.getElementById('videoDetails').innerHTML = '<div class="empty-state">Deleted.</div>';
-}
+    async function deleteVideo(id) {
+      if (!confirm('Delete this video?')) return;
+      await fetch(`${API_URL}/videos/${id}`, { method: 'DELETE' });
+      fetchVideos();
+      document.getElementById('videoDetails').innerHTML = '<div class="empty-state">Deleted.</div>';
+    }
 
-async function viewVideoDetails(id) {
-  const el = document.getElementById('videoDetails');
-  el.innerHTML = '<div class="empty-state">Loading...</div>';
-  try {
-    const r = await fetch(`${API_URL}/videos/${id}`);
-    const v = await r.json();
-    let html = `<div class="details-box">
+    async function viewVideoDetails(id) {
+      const el = document.getElementById('videoDetails');
+      el.innerHTML = '<div class="empty-state">Loading...</div>';
+      try {
+        const r = await fetch(`${API_URL}/videos/${id}`);
+        const v = await r.json();
+        let html = `<div class="details-box">
       <h3>${escHtml(v.title)}</h3>
       <p class="meta">
         <span class="status-badge status-${v.processed_status}">${v.processed_status}</span>
@@ -477,10 +792,10 @@ async function viewVideoDetails(id) {
           <source src="${v.original_video_url}" type="video/mp4"></video>` : ''}
       </div>`;
 
-    if (v.processed_status === 'processing') {
-      html += `<p style="margin-top:1rem;color:#82b1ff;">⏳ Veo is generating... check back in 1-6 min.</p>`;
-    } else if (v.processed_status === 'completed' && v.generated_video_url) {
-      html += `<div style="margin-top:1rem;">
+        if (v.processed_status === 'processing') {
+          html += `<p style="margin-top:1rem;color:#82b1ff;">⏳ Veo is generating... check back in 1-6 min.</p>`;
+        } else if (v.processed_status === 'completed' && v.generated_video_url) {
+          html += `<div style="margin-top:1rem;">
         <h4 style="color:#00c853;margin-bottom:.5rem;">🎬 Generated Group Dance</h4>
         <video controls autoplay style="width:100%;max-height:380px;border-radius:8px;background:#000;">
           <source src="${v.generated_video_url}" type="video/mp4">
@@ -490,118 +805,118 @@ async function viewVideoDetails(id) {
           <a href="${API_URL}/generated-videos/${v.id}/download" class="btn btn-sm btn-dl">⬇ Download (Named)</a>
         </div>
       </div>`;
-    } else if (v.processed_status === 'failed') {
-      html += `<p style="margin-top:1rem;color:#ff8a80;">❌ Generation failed.</p>`;
-    }
+        } else if (v.processed_status === 'failed') {
+          html += `<p style="margin-top:1rem;color:#ff8a80;">❌ Generation failed.</p>`;
+        }
 
-    if (v.gemini_analysis) {
-      html += `<details style="margin-top:1rem;"><summary style="color:#b388ff;cursor:pointer;">View Analysis</summary>
+        if (v.gemini_analysis) {
+          html += `<details style="margin-top:1rem;"><summary style="color:#b388ff;cursor:pointer;">View Analysis</summary>
         <pre>${escHtml(v.gemini_analysis)}</pre></details>`;
+        }
+        html += `</div>`;
+        el.innerHTML = html;
+      } catch (err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
     }
-    html += `</div>`;
-    el.innerHTML = html;
-  } catch(err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
-}
 
 
-// ═══════════════════════════════════════════════════════
-//  TAB 2 — IMAGE TO VIDEO
-// ═══════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════
+    //  TAB 2 — IMAGE TO VIDEO
+    // ═══════════════════════════════════════════════════════
 
-// Image preview
-document.getElementById('imgFile').addEventListener('change', e => {
-  const file = e.target.files[0];
-  const prev = document.getElementById('imgPreview');
-  if (file) {
-    prev.src = URL.createObjectURL(file);
-    prev.style.display = 'block';
-  } else {
-    prev.style.display = 'none';
-  }
-});
+    // Image preview
+    document.getElementById('imgFile').addEventListener('change', e => {
+      const file = e.target.files[0];
+      const prev = document.getElementById('imgPreview');
+      if (file) {
+        prev.src = URL.createObjectURL(file);
+        prev.style.display = 'block';
+      } else {
+        prev.style.display = 'none';
+      }
+    });
 
-// Load dance style pills from API
-async function loadStyles() {
-  const container = document.getElementById('stylePills');
-  if (container.children.length > 0) return; // already loaded
-  try {
-    const r  = await fetch(`${API_URL}/dance-styles/`);
-    const d  = await r.json();
-    container.innerHTML = d.styles.map(s => `
+    // Load dance style pills from API
+    async function loadStyles() {
+      const container = document.getElementById('stylePills');
+      if (container.children.length > 0) return; // already loaded
+      try {
+        const r = await fetch(`${API_URL}/dance-styles/`);
+        const d = await r.json();
+        container.innerHTML = d.styles.map(s => `
       <div class="style-pill" onclick="selectStyle(this, '${escHtml(s)}')">${escHtml(s)}</div>
     `).join('');
-  } catch {
-    // Fallback static list
-    const fallback = [
-      'hip-hop','breakdancing / b-boy','popping & locking','krump',
-      'waacking','vogueing','contemporary','ballet','salsa','bachata',
-      'twerk','K-pop','bollywood','afrobeats','jazz funk','tutting'
-    ];
-    container.innerHTML = fallback.map(s => `
+      } catch {
+        // Fallback static list
+        const fallback = [
+          'hip-hop', 'breakdancing / b-boy', 'popping & locking', 'krump',
+          'waacking', 'vogueing', 'contemporary', 'ballet', 'salsa', 'bachata',
+          'twerk', 'K-pop', 'bollywood', 'afrobeats', 'jazz funk', 'tutting'
+        ];
+        container.innerHTML = fallback.map(s => `
       <div class="style-pill" onclick="selectStyle(this, '${escHtml(s)}')">${escHtml(s)}</div>
     `).join('');
-  }
-}
+      }
+    }
 
-function selectStyle(el, style) {
-  document.querySelectorAll('.style-pill').forEach(p => p.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('selectedStyle').value = style;
-  document.getElementById('styleError').style.display = 'none';
-}
+    function selectStyle(el, style) {
+      document.querySelectorAll('.style-pill').forEach(p => p.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('selectedStyle').value = style;
+      document.getElementById('styleError').style.display = 'none';
+    }
 
-document.getElementById('imgForm').addEventListener('submit', async e => {
-  e.preventDefault();
+    document.getElementById('imgForm').addEventListener('submit', async e => {
+      e.preventDefault();
 
-  const style = document.getElementById('selectedStyle').value;
-  if (!style) {
-    document.getElementById('styleError').style.display = 'block'; return;
-  }
+      const style = document.getElementById('selectedStyle').value;
+      if (!style) {
+        document.getElementById('styleError').style.display = 'block'; return;
+      }
 
-  const formData = new FormData();
-  formData.append('title',         document.getElementById('imgTitle').value);
-  formData.append('dance_style',   style);
-  formData.append('dancers_count', document.getElementById('imgDancers').value);
-  formData.append('file',          document.getElementById('imgFile').files[0]);
+      const formData = new FormData();
+      formData.append('title', document.getElementById('imgTitle').value);
+      formData.append('dance_style', style);
+      formData.append('dancers_count', document.getElementById('imgDancers').value);
+      formData.append('file', document.getElementById('imgFile').files[0]);
 
-  const resultDiv = document.getElementById('imgUploadResult');
-  resultDiv.innerHTML = '<div class="upload-status loading">⏳ Uploading photo & starting Gemini face analysis + Veo generation...</div>';
+      const resultDiv = document.getElementById('imgUploadResult');
+      resultDiv.innerHTML = '<div class="upload-status loading">⏳ Uploading photo & starting Gemini face analysis + Veo generation...</div>';
 
-  try {
-    const r = await fetch(`${API_URL}/image-video/`, { method:'POST', body: formData });
-    const d = await r.json();
-    resultDiv.innerHTML = `<div class="upload-status success">
+      try {
+        const r = await fetch(`${API_URL}/image-video/`, { method: 'POST', body: formData });
+        const d = await r.json();
+        resultDiv.innerHTML = `<div class="upload-status success">
       ✅ Job started! ID: ${d.id} · Style: <strong>${escHtml(style)}</strong>
       — Generation takes ~3-10 min. Auto-refreshing below.
     </div>`;
-    fetchImageJobs();
-    startImagePolling(d.id);
-  } catch(err) {
-    resultDiv.innerHTML = `<div class="upload-status error">❌ ${err.message}</div>`;
-  }
-});
-
-function startImagePolling(id) {
-  if (imagePolls[id]) return;
-  imagePolls[id] = setInterval(async () => {
-    try {
-      const r = await fetch(`${API_URL}/image-video/${id}`);
-      const j = await r.json();
-      if (j.status === 'completed' || j.status === 'failed') {
-        clearInterval(imagePolls[id]); delete imagePolls[id];
-        fetchImageJobs(); viewImageJobDetails(id);
+        fetchImageJobs();
+        startImagePolling(d.id);
+      } catch (err) {
+        resultDiv.innerHTML = `<div class="upload-status error">❌ ${err.message}</div>`;
       }
-    } catch { clearInterval(imagePolls[id]); delete imagePolls[id]; }
-  }, 5000);
-}
+    });
 
-async function fetchImageJobs() {
-  const el = document.getElementById('imageJobsList');
-  try {
-    const r    = await fetch(`${API_URL}/image-video/`);
-    const jobs = await r.json();
-    if (!jobs.length) { el.innerHTML = '<div class="empty-state">No jobs yet.</div>'; return; }
-    el.innerHTML = jobs.map(j => `
+    function startImagePolling(id) {
+      if (imagePolls[id]) return;
+      imagePolls[id] = setInterval(async () => {
+        try {
+          const r = await fetch(`${API_URL}/image-video/${id}`);
+          const j = await r.json();
+          if (j.status === 'completed' || j.status === 'failed') {
+            clearInterval(imagePolls[id]); delete imagePolls[id];
+            fetchImageJobs(); viewImageJobDetails(id);
+          }
+        } catch { clearInterval(imagePolls[id]); delete imagePolls[id]; }
+      }, 5000);
+    }
+
+    async function fetchImageJobs() {
+      const el = document.getElementById('imageJobsList');
+      try {
+        const r = await fetch(`${API_URL}/image-video/`);
+        const jobs = await r.json();
+        if (!jobs.length) { el.innerHTML = '<div class="empty-state">No jobs yet.</div>'; return; }
+        el.innerHTML = jobs.map(j => `
       <div class="video-item">
         <div class="video-info">
           <strong>${escHtml(j.title)}</strong>
@@ -614,28 +929,28 @@ async function fetchImageJobs() {
           <button class="btn btn-sm btn-danger" onclick="deleteImageJob(${j.id})">Delete</button>
         </div>
       </div>`).join('');
-    jobs.forEach(j => {
-      if (j.status === 'processing' || j.status === 'pending')
-        startImagePolling(j.id);
-    });
-  } catch(err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
-}
+        jobs.forEach(j => {
+          if (j.status === 'processing' || j.status === 'pending')
+            startImagePolling(j.id);
+        });
+      } catch (err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
+    }
 
-async function deleteImageJob(id) {
-  if (!confirm('Delete this job?')) return;
-  await fetch(`${API_URL}/image-video/${id}`, {method:'DELETE'});
-  fetchImageJobs();
-  document.getElementById('imageJobDetails').innerHTML = '<div class="empty-state">Deleted.</div>';
-}
+    async function deleteImageJob(id) {
+      if (!confirm('Delete this job?')) return;
+      await fetch(`${API_URL}/image-video/${id}`, { method: 'DELETE' });
+      fetchImageJobs();
+      document.getElementById('imageJobDetails').innerHTML = '<div class="empty-state">Deleted.</div>';
+    }
 
-async function viewImageJobDetails(id) {
-  const el = document.getElementById('imageJobDetails');
-  el.innerHTML = '<div class="empty-state">Loading...</div>';
-  try {
-    const r = await fetch(`${API_URL}/image-video/${id}`);
-    const j = await r.json();
+    async function viewImageJobDetails(id) {
+      const el = document.getElementById('imageJobDetails');
+      el.innerHTML = '<div class="empty-state">Loading...</div>';
+      try {
+        const r = await fetch(`${API_URL}/image-video/${id}`);
+        const j = await r.json();
 
-    let html = `<div class="details-box">
+        let html = `<div class="details-box">
       <h3>${escHtml(j.title)}</h3>
       <p class="meta">
         <span class="status-badge status-${j.status}">${j.status}</span>
@@ -643,21 +958,21 @@ async function viewImageJobDetails(id) {
         · ${j.dancers_count} backup dancers
       </p>`;
 
-    // Reference photo
-    if (j.image_url) {
-      html += `<div style="margin-top:1rem;">
+        // Reference photo
+        if (j.image_url) {
+          html += `<div style="margin-top:1rem;">
         <h4 style="color:#b388ff;margin-bottom:.5rem;">Reference Photo</h4>
         <img src="${j.image_url}" style="max-width:180px;max-height:220px;border-radius:8px;border:2px solid rgba(124,77,255,.4);">
       </div>`;
-    }
+        }
 
-    if (j.status === 'processing' || j.status === 'pending') {
-      html += `<p style="margin-top:1rem;color:#82b1ff;">
+        if (j.status === 'processing' || j.status === 'pending') {
+          html += `<p style="margin-top:1rem;color:#82b1ff;">
         ⏳ Gemini is analysing the face, then Veo is generating the dance video...
         This takes 3–10 minutes. Page auto-refreshes every 5s.
       </p>`;
-    } else if (j.status === 'completed' && j.generated_video_url) {
-      html += `<div style="margin-top:1rem;">
+        } else if (j.status === 'completed' && j.generated_video_url) {
+          html += `<div style="margin-top:1rem;">
         <h4 style="color:#00c853;margin-bottom:.5rem;">🎬 Generated Dance Video</h4>
         <video controls autoplay style="width:100%;max-height:420px;border-radius:8px;background:#000;">
           <source src="${j.generated_video_url}" type="video/mp4">
@@ -667,38 +982,312 @@ async function viewImageJobDetails(id) {
           <a href="${API_URL}/image-video/${j.id}/download" class="btn btn-sm btn-dl">⬇ Download (Named)</a>
         </div>
       </div>`;
-    } else if (j.status === 'failed') {
-      html += `<p style="margin-top:1rem;color:#ff8a80;">❌ Generation failed. Check server logs.</p>`;
-    }
+        } else if (j.status === 'failed') {
+          html += `<p style="margin-top:1rem;color:#ff8a80;">❌ Generation failed. Check server logs.</p>`;
+        }
 
-    if (j.analysis) {
-      html += `<details style="margin-top:1rem;">
+        if (j.analysis) {
+          html += `<details style="margin-top:1rem;">
         <summary style="color:#b388ff;cursor:pointer;">View Face Analysis & Prompt</summary>
         <pre>${escHtml(j.analysis)}</pre>
       </details>`;
+        }
+        html += `</div>`;
+        el.innerHTML = html;
+      } catch (err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
     }
-    html += `</div>`;
-    el.innerHTML = html;
-  } catch(err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
-}
 
 
-// ═══════════════════════════════════════════════════════
-//  Utilities
-// ═══════════════════════════════════════════════════════
-function escHtml(t) {
-  const d = document.createElement('div');
-  d.textContent = t ?? '';
-  return d.innerHTML;
-}
-function fmtDate(s) {
-  try { return new Date(s).toLocaleString(); } catch { return s; }
-}
+    // ═══════════════════════════════════════════════════════
+    //  TAB 3 — ANIME TO VIDEO
+    // ═══════════════════════════════════════════════════════
 
-// Initial load
-fetchVideos();
-loadStyles();
-fetchImageJobs();
-</script>
+    let animePolls = {};
+
+    // Image preview
+    document.getElementById('animeFile').addEventListener('change', e => {
+      const file = e.target.files[0];
+      const prev = document.getElementById('animePreview');
+      if (file) {
+        prev.src = URL.createObjectURL(file);
+        prev.style.display = 'block';
+      } else {
+        prev.style.display = 'none';
+      }
+    });
+
+    document.getElementById('animeForm').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const style = document.getElementById('animeStyle').value;
+      const duration = document.getElementById('animeDuration').value;
+
+      const formData = new FormData();
+      formData.append('title', document.getElementById('animeTitle').value);
+      formData.append('dance_style', style);
+      formData.append('duration', duration);
+      formData.append('ai_model', document.getElementById('animeAIModel').value);
+      formData.append('file', document.getElementById('animeFile').files[0]);
+
+      const resultDiv = document.getElementById('animeUploadResult');
+      resultDiv.innerHTML = '<div class="upload-status loading">⏳ Uploading photo & starting Runway logic...</div>';
+
+      try {
+        const r = await fetch(`${API_URL}/anime-video/`, { method: 'POST', body: formData });
+        const d = await r.json();
+        resultDiv.innerHTML = `<div class="upload-status success">
+      ✅ Job started! ID: ${d.id} · Genre: <strong>${escHtml(style)}</strong>
+      — Generation takes time for 30s. Auto-refreshing below.
+    </div>`;
+        fetchAnimeJobs();
+        startAnimePolling(d.id);
+      } catch (err) {
+        resultDiv.innerHTML = `<div class="upload-status error">❌ ${err.message}</div>`;
+      }
+    });
+
+    function startAnimePolling(id) {
+      if (animePolls[id]) return;
+      animePolls[id] = setInterval(async () => {
+        try {
+          const r = await fetch(`${API_URL}/anime-video/${id}`);
+          const j = await r.json();
+          if (j.status === 'completed' || j.status === 'failed') {
+            clearInterval(animePolls[id]); delete animePolls[id];
+            fetchAnimeJobs(); viewAnimeJobDetails(id);
+          }
+        } catch { clearInterval(animePolls[id]); delete animePolls[id]; }
+      }, 10000);
+    }
+
+    async function fetchAnimeJobs() {
+      const el = document.getElementById('animeJobsList');
+      try {
+        const r = await fetch(`${API_URL}/anime-video/`);
+        const jobs = await r.json();
+        if (!jobs.length) { el.innerHTML = '<div class="empty-state">No jobs yet.</div>'; return; }
+        el.innerHTML = jobs.map(j => `
+      <div class="video-item">
+        <div class="video-info">
+          <strong>${escHtml(j.title)}</strong>
+          <span class="dance-tag">${escHtml(j.dance_style)}</span>
+          <span class="dance-tag" style="background:rgba(41,121,255,0.12); border-color: rgba(41,121,255,0.3); color: #82b1ff;">${j.ai_model === 'runway' ? 'Runway Gen3' : 'Google Veo'}</span>
+          <span class="status-badge status-${j.status}">${j.status}</span>
+          <div class="meta">ID: ${j.id} · ${fmtDate(j.created_at)}</div>
+        </div>
+        <div class="video-actions">
+          <button class="btn btn-sm btn-view"   onclick="viewAnimeJobDetails(${j.id})">View</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteAnimeJob(${j.id})">Delete</button>
+        </div>
+      </div>`).join('');
+        jobs.forEach(j => {
+          if (j.status === 'processing' || j.status === 'pending')
+            startAnimePolling(j.id);
+        });
+      } catch (err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
+    }
+
+    async function deleteAnimeJob(id) {
+      if (!confirm('Delete this anime job?')) return;
+      await fetch(`${API_URL}/anime-video/${id}`, { method: 'DELETE' });
+      fetchAnimeJobs();
+      document.getElementById('animeJobDetails').innerHTML = '<div class="empty-state">Deleted.</div>';
+    }
+
+    async function viewAnimeJobDetails(id) {
+      const el = document.getElementById('animeJobDetails');
+      el.innerHTML = '<div class="empty-state">Loading...</div>';
+      try {
+        const r = await fetch(`${API_URL}/anime-video/${id}`);
+        const j = await r.json();
+
+        let html = `<div class="details-box">
+      <h3>${escHtml(j.title)}</h3>
+      <p class="meta">
+        <span class="status-badge status-${j.status}">${j.status}</span>
+        · <span class="dance-tag">${escHtml(j.dance_style)}</span>
+        · <span class="dance-tag" style="background:rgba(41,121,255,0.12); border-color: rgba(41,121,255,0.3); color: #82b1ff;">${j.ai_model === 'runway' ? 'Runway Gen3' : 'Google Veo'}</span>
+      </p>
+      
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">`;
+
+        // Reference photo
+        if (j.original_image_url) {
+          html += `<div style="margin-top:1rem;">
+        <h4 style="color:#b388ff;margin-bottom:.5rem;">Original Photo</h4>
+        <img src="${j.original_image_url}" style="max-width:180px;max-height:220px;border-radius:8px;border:2px solid rgba(124,77,255,.4);">
+      </div>`;
+        }
+        // Anime photo
+        if (j.anime_image_url) {
+          html += `<div style="margin-top:1rem;">
+        <h4 style="color:#b388ff;margin-bottom:.5rem;">Anime Render</h4>
+        <img src="${j.anime_image_url}" style="max-width:180px;max-height:220px;border-radius:8px;border:2px solid rgba(124,77,255,.4);">
+      </div>`;
+        }
+
+        html += `</div>`;
+
+        if (j.status === 'processing' || j.status === 'pending') {
+          html += `<p style="margin-top:1rem;color:#82b1ff;">
+        ⏳ Generating Anime image & ${j.duration}s video (chunks of 8s). Refreshes every 10s...
+      </p>`;
+        } else if (j.status === 'completed' && j.generated_video_url) {
+          html += `<div style="margin-top:1rem;">
+        <h4 style="color:#00c853;margin-bottom:.5rem;">🎬 ${j.duration}-Second Anime Video</h4>
+        <video controls autoplay style="width:100%;max-height:420px;border-radius:8px;background:#000;">
+          <source src="${j.generated_video_url}" type="video/mp4">
+        </video>
+        <div style="margin-top:.5rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+          <a href="${j.generated_video_url}" download class="btn btn-sm btn-primary">⬇ Download</a>
+        </div>
+      </div>`;
+        } else if (j.status === 'failed') {
+          html += `<p style="margin-top:1rem;color:#ff8a80;">❌ Generation failed. Check server logs.</p>`;
+        }
+
+        html += `</div>`;
+        el.innerHTML = html;
+      } catch (err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
+    }
+
+
+    // ═══════════════════════════════════════════════════════
+    //  TAB 4 — FACE-CONSISTENT VIDEO
+    // ═══════════════════════════════════════════════════════
+
+    let facePolls = {};
+
+    document.getElementById('faceFile').addEventListener('change', e => {
+      const file = e.target.files[0];
+      const prev = document.getElementById('facePreview');
+      if (file) { prev.src = URL.createObjectURL(file); prev.style.display = 'block'; }
+      else { prev.style.display = 'none'; }
+    });
+
+    document.getElementById('faceForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('title', document.getElementById('faceTitle').value);
+      formData.append('action', document.getElementById('faceAction').value);
+      formData.append('duration', document.getElementById('faceDuration').value);
+      formData.append('file', document.getElementById('faceFile').files[0]);
+
+      const resultDiv = document.getElementById('faceUploadResult');
+      resultDiv.innerHTML = '<div class="upload-status loading">⏳ Uploading and starting generation...</div>';
+
+      try {
+        const r = await fetch(`${API_URL}/face-video/`, { method: 'POST', body: formData });
+        const job = await r.json();
+        if (!r.ok) throw new Error(job.detail || JSON.stringify(job));
+        resultDiv.innerHTML = `<div class="upload-status success">✅ Job started! ID: <strong>${job.id}</strong> — status: <em>${job.status}</em></div>`;
+        fetchFaceJobs();
+        startFacePolling(job.id);
+      } catch (err) {
+        resultDiv.innerHTML = `<div class="upload-status error">❌ ${err.message}</div>`;
+      }
+    });
+
+    function startFacePolling(id) {
+      if (facePolls[id]) return;
+      facePolls[id] = setInterval(async () => {
+        const r = await fetch(`${API_URL}/face-video/${id}`);
+        const j = await r.json();
+        if (j.status === 'completed' || j.status === 'failed') {
+          clearInterval(facePolls[id]); delete facePolls[id];
+          fetchFaceJobs();
+          viewFaceJobDetails(id);
+        }
+      }, 6000);
+    }
+
+    async function fetchFaceJobs() {
+      const el = document.getElementById('faceJobsList');
+      try {
+        const r = await fetch(`${API_URL}/face-video/`);
+        const jobs = await r.json();
+        if (!jobs.length) { el.innerHTML = '<div class="empty-state">No jobs yet.</div>'; return; }
+        el.innerHTML = jobs.map(j => `
+          <div class="video-item" onclick="viewFaceJobDetails(${j.id})">
+            <div class="video-thumb">
+              ${j.image_url ? `<img src="${j.image_url}" alt="photo">` : '🧑'}
+            </div>
+            <div class="video-info">
+              <strong>${escHtml(j.title)}</strong>
+              <span class="dance-tag">${escHtml(j.action)}</span>
+              <span class="dance-tag" style="background:rgba(0,230,118,0.12);border-color:rgba(0,230,118,0.3);color:#69f0ae;">${j.duration}s</span>
+              <span class="status-badge status-${j.status}">${j.status}</span>
+              <div class="meta">ID: ${j.id} · ${fmtDate(j.created_at)}</div>
+            </div>
+          </div>`).join('');
+        jobs.filter(j => j.status === 'processing' || j.status === 'pending')
+          .forEach(j => startFacePolling(j.id));
+      } catch (err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
+    }
+
+    async function viewFaceJobDetails(id) {
+      const el = document.getElementById('faceJobDetails');
+      el.innerHTML = '<div class="empty-state">Loading...</div>';
+      try {
+        const r = await fetch(`${API_URL}/face-video/${id}`);
+        const j = await r.json();
+        let html = `<div class="details-box">
+      <h3>${escHtml(j.title)}</h3>
+      <p class="meta">
+        <span class="status-badge status-${j.status}">${j.status}</span>
+        · <span class="dance-tag">${escHtml(j.action)}</span>
+        · <span class="dance-tag" style="background:rgba(0,230,118,0.12);border-color:rgba(0,230,118,0.3);color:#69f0ae;">${j.duration}s</span>
+      </p>`;
+        if (j.image_url) html += `
+      <div style="margin-top:1rem;">
+        <h4 style="color:#69f0ae;margin-bottom:.5rem;">📸 Reference Photo</h4>
+        <img src="${j.image_url}" style="max-width:200px;border-radius:8px;border:2px solid rgba(0,230,118,.35);">
+      </div>`;
+        if (j.status === 'processing' || j.status === 'pending') {
+          html += `<p style="margin-top:1rem;color:#82b1ff;">⏳ RunwayML is generating your face-consistent video. Auto-refreshes every 6s.</p>`;
+          startFacePolling(j.id);
+        } else if (j.status === 'completed' && j.generated_video_url) {
+          html += `
+      <div style="margin-top:1.5rem;">
+        <h4 style="color:#69f0ae;margin-bottom:.5rem;">🎬 Generated Video (Face Preserved)</h4>
+        <video controls style="width:100%;max-width:400px;border-radius:12px;border:2px solid rgba(0,230,118,.35);">
+          <source src="${j.generated_video_url}" type="video/mp4">
+        </video>
+        <div style="margin-top:.75rem;">
+          <a href="${j.generated_video_url}" download class="btn btn-primary" style="font-size:.85rem;">⬇ Download MP4</a>
+        </div>
+      </div>`;
+        } else if (j.status === 'failed') {
+          html += `<p style="margin-top:1rem;color:#ff8a80;">❌ Generation failed. Check server logs.</p>`;
+        }
+        if (j.prompt_used) html += `
+      <details style="margin-top:1rem;">
+        <summary style="color:#b388ff;cursor:pointer;">View Prompt Used</summary>
+        <pre>${escHtml(j.prompt_used)}</pre>
+      </details>`;
+        html += `</div>`;
+        el.innerHTML = html;
+      } catch (err) { el.innerHTML = `<div class="empty-state">Error: ${err.message}</div>`; }
+    }
+
+
+    // ═══════════════════════════════════════════════════════
+    function escHtml(t) {
+      const d = document.createElement('div');
+      d.textContent = t ?? '';
+      return d.innerHTML;
+    }
+    function fmtDate(s) {
+      try { return new Date(s).toLocaleString(); } catch { return s; }
+    }
+
+    // Initial load
+    fetchVideos();
+    loadStyles();
+    fetchImageJobs();
+    fetchAnimeJobs();
+    fetchFaceJobs();
+  </script>
 </body>
+
 </html>

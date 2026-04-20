@@ -573,6 +573,11 @@ def generate_veo_clip(client, prompt: str, negative: str,
             raise Exception("Veo timed out after 10 minutes")
 
     print(f"  ✓ Clip {clip_index + 1} generated!")
+    
+    # Defensive check for response
+    if not operation.response or not operation.response.generated_videos:
+        err_msg = f"Veo generation failed. Error: {operation.error}" if operation.error else "Veo generation failed: No video returned (possibly blocked by safety filters)."
+        raise Exception(err_msg)
 
     vid      = operation.response.generated_videos[0]
     raw_path = f"processed/clip_raw_{clip_index}_{int(time.time())}.mp4"

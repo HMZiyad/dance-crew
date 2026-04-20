@@ -5,3 +5,9 @@ processed/
 __pycache__/
 *.pyc
 
+# Environment and Secrets
+
+# Database
+*.db
+config.bat
+node_modules

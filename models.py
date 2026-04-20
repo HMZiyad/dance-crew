@@ -45,4 +45,38 @@ class ImageJobResponse(BaseModel):
  
     class Config:
         from_attributes = True
- 
+
+class AnimeJobResponse(BaseModel):
+    id: int
+    title: str
+    dance_style: str
+    duration: int
+    ai_model: str
+    status: str
+    created_at: datetime
+    original_image_path: Optional[str] = None
+    anime_image_path: Optional[str] = None
+    output_file_path: Optional[str] = None
+    
+    original_image_url: Optional[str] = None
+    anime_image_url: Optional[str] = None
+    generated_video_url: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class FaceVideoJobResponse(BaseModel):
+    id: int
+    title: str
+    action: str
+    duration: int
+    status: str
+    created_at: datetime
+    image_file_path: Optional[str] = None
+    output_file_path: Optional[str] = None
+    prompt_used: Optional[str] = None
+    image_url: Optional[str] = None
+    generated_video_url: Optional[str] = None
+
+    class Config:
+        from_attributes = True

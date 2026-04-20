@@ -40,6 +40,37 @@ class ImageJob(Base):
     analysis         = Column(String, nullable=True)        # Gemini analysis + prompt used
 
 
+class AnimeJob(Base):
+    """Tracks image-to-anime-video generation jobs."""
+    __tablename__ = "anime_jobs"
+
+    id               = Column(Integer, primary_key=True, index=True)
+    title            = Column(String, index=True)
+    dance_style      = Column(String)                      # restricted e.g. "hip-hop"
+    duration         = Column(Integer, default=30)         # 10, 20, or 30 seconds
+    ai_model         = Column(String, default="veo")       # "veo" or "runway"
+    status           = Column(String, default="pending")   # pending/processing/completed/failed
+    created_at       = Column(DateTime, default=datetime.utcnow)
+    original_image_path = Column(String)                   # uploaded reference photo
+    anime_image_path    = Column(String, nullable=True)    # generated anime photo
+    output_file_path = Column(String, nullable=True)       # generated 30s MP4
+
+
+class FaceVideoJob(Base):
+    """Tracks face-consistent image-to-video generation jobs."""
+    __tablename__ = "face_video_jobs"
+
+    id               = Column(Integer, primary_key=True, index=True)
+    title            = Column(String, index=True)
+    action           = Column(String)                      # e.g. "hip-hop dance"
+    duration         = Column(Integer, default=10)         # seconds
+    status           = Column(String, default="pending")   # pending/processing/completed/failed
+    created_at       = Column(DateTime, default=datetime.utcnow)
+    image_file_path  = Column(String)                      # uploaded reference photo
+    output_file_path = Column(String, nullable=True)       # generated MP4
+    prompt_used      = Column(String, nullable=True)       # RunwayML prompt used
+
+
 def init_db():
     Base.metadata.create_all(bind=engine)
 

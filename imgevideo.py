@@ -50,6 +50,8 @@ load_dotenv()
 
 GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
 
+import choreography_library
+
 # ── Constants ─────────────────────────────────────────────
 VEO_CLIP_SECONDS  = 8
 NUM_CLIPS         = 2        # 2 × 8s = 16 s total
@@ -380,34 +382,37 @@ def gemini_write_dance_prompt(client, image_path: str,
         if dancers_count > 0 else "full body visible from head to toe,"
     )
 
-    instruction = f"""You are a Veo 3.1 prompt engineer.
+    choreo_moves = choreography_library.get_choreo(dance_style)
+
+    instruction = f"""You are a Veo 3.1 prompt engineer specialising in dance videos.
 Look at this photo and write a prompt for a {dance_style} dance video.
 
 FOCUS ON:
   1. The person's EXACT OUTFIT (every garment, colour, pattern, footwear, accessories)
-  2. A fitting {dance_style} dance environment (floor, walls, lighting)
-  3. The energy and movement of {dance_style} choreography
+  2. A real {dance_style}-appropriate environment (specific floor type, walls, lighting)
+  3. SPECIFIC choreographic moves listed below — these MUST appear in the prompt
 
-DO NOT describe the face, skin tone, or facial features — those will be handled separately.
+CHOREOGRAPHY MOVES TO INCLUDE:
+{choreo_moves}
 
-Write 3 sentences:
+DO NOT describe the face, skin tone, or facial features.
+
+Write exactly 3 sentences:
 
 Sentence 1:
-"{orient}, wide full-body shot. A dancer wearing [EXACT OUTFIT from photo] performs dynamic {dance_style} choreography, {backup_line} expressive fluid movement."
+"{orient}, wide full-body shot. A dancer wearing [EXACT OUTFIT from photo] is {choreo_moves[:200]}, {backup_line}."
 
-Sentence 2: The setting — describe a real {dance_style} appropriate environment with specific floor, walls, lighting.
+Sentence 2: The setting — one sentence describing a real {dance_style}-appropriate venue: floor surface, wall, lighting.
 
-Sentence 3: "{'All ' + str(total) + ' performers moving in perfect sync, ' if dancers_count > 0 else ''}energetic {dance_style} choreography, smooth camera, TikTok dance video aesthetic."
+Sentence 3: "{'All ' + str(total) + ' performers in perfect sync, ' if dancers_count > 0 else ''}high-energy {dance_style} performance, smooth tracking camera, cinematic 24fps, TikTok dance video aesthetic, professional choreography."
 
-Also write a NEGATIVE_PROMPT (comma-separated):
-cartoon, anime, 3D render, CGI, extra limbs, distorted body, blurry face,
-watermark, text, miniature people, doll-like, cropped body, partial figure,
-{"solo dancer, single person," if dancers_count > 0 else ""}low quality, ugly
+Also write:
+NEGATIVE_PROMPT: static pose, standing still, walking, cartoon, anime, 3D render, CGI, extra limbs, distorted body, blurry face, watermark, text, miniature people, doll-like, cropped body, partial figure, {"solo dancer, single person," if dancers_count > 0 else ""}low quality
 
 FORMAT:
 VEO_PROMPT: [prompt]
 NEGATIVE_PROMPT: [negatives]
-OUTFIT_DESCRIPTION: [just the outfit, 1-2 sentences]"""
+OUTFIT_DESCRIPTION: [outfit only, 1-2 sentences]"""
 
     try:
         resp = client.models.generate_content(
@@ -534,6 +539,12 @@ def generate_veo_clip(client, prompt: str, negative: str,
             raise Exception("Veo timed out")
 
     print(f"  ✓ Veo clip {clip_index+1} done!")
+    
+    # Defensive check for response
+    if not operation.response or not operation.response.generated_videos:
+        err_msg = f"Veo generation failed. Error: {operation.error}" if operation.error else "Veo generation failed: No video returned (possibly blocked by safety filters)."
+        raise Exception(err_msg)
+
     vid      = operation.response.generated_videos[0]
     raw_path = f"processed/imgvid_raw_{clip_index}_{int(time.time())}.mp4"
     client.files.download(file=vid.video)
